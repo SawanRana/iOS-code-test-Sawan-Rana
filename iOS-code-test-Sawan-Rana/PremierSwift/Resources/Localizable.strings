@@ -1,0 +1,29 @@
+/**
+ *  Context: Title of the top movies screen
+ *  Max characters: 40
+ */
+"movies.title" = "Top Movies";
+
+/**
+ *  Context: Body of the error message shown when the movies fail to load
+ *  Max characters: 150
+ */
+"movies.load.error.body" = "Something went wrong. Pull to refresh";
+
+/**
+ *  Context: Button on the movies error alert
+ *  Max characters: 40
+ */
+"movies.load.error.actionButton" = "Okay";
+
+/**
+ *  Context: Body of the error message shown when the movies fail to load
+ *  Max characters: 150
+ */
+"moviedetails.load.error.body" = "Something went wrong.";
+
+/**
+ *  Context: Button on the movies error alert
+ *  Max characters: 40
+ */
+"moviedetails.load.error.actionButton" = "Okay";
