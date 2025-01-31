@@ -56,7 +56,7 @@ final class MovieDetailsViewController: UIViewController {
     }
 
     private func showMovieDetails(_ movieDetails: MovieDetails) {
-        let displayViewController = MovieDetailsDisplayViewController(movieDetails: movieDetails)
+        let displayViewController = MovieDetailsDisplayViewController(viewModel: .init(movieDetails: movieDetails))
         addChild(displayViewController)
         displayViewController.view.frame = view.bounds
         displayViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
