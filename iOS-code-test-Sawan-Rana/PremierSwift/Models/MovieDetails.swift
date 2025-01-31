@@ -3,13 +3,14 @@ import Foundation
 import Foundation
 
 struct MovieDetails: Decodable {
-    
+    let id: Int
     let title: String
     let overview: String
     let backdropPath: String
     let tagline: String?
     
     enum CodingKeys: String, CodingKey {
+        case id
         case title
         case overview
         case backdropPath = "backdrop_path"
@@ -21,5 +22,9 @@ struct MovieDetails: Decodable {
 extension MovieDetails {
     static func details(for movie: Movie) -> Request<MovieDetails> {
         return Request(method: .get, path: "/movie/\(movie.id)")
+    }
+    
+    static func similarMovies(for movieId: Int) -> Request<Page<Movie>> {
+        return Request(method: .get, path: "/movie/\(movieId)/similar")
     }
 }
