@@ -2,10 +2,10 @@ import UIKit
 
 final class MovieDetailsDisplayViewController: UIViewController {
     
-    let movieDetails: MovieDetails
+    let viewModel: ModelDetailsDisplayViewModel
     
-    init(movieDetails: MovieDetails) {
-        self.movieDetails = movieDetails
+    init(viewModel: ModelDetailsDisplayViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -19,16 +19,40 @@ final class MovieDetailsDisplayViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        (view as? View)?.configure(movieDetails: movieDetails)
+        bindViewModel()
+        (view as? View)?.configure(movieDetails: viewModel._movieDetails)
+        viewModel.fetchSimilarMovies()
+    }
+    
+    private func bindViewModel() {
+        viewModel.updatedState = { [weak self] in
+            guard let self else { return }
+            self.updateFromViewModel()
+        }
+    }
+    
+    private func updateFromViewModel() {
+        switch viewModel.state {
+        case .loading(_), .error:
+            break
+        case .loaded(let movies):
+            guard !movies.isEmpty else { return }
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                (self.view as? View)?.configureSimilarMovies(with: movies)
+            }
+        }
     }
     
     private class View: UIView {
-        
+
         let scrollView = UIScrollView()
         let backdropImageView = UIImageView()
         let titleLabel = UILabel()
         let overviewLabel = UILabel()
-        private lazy var contentStackView = UIStackView(arrangedSubviews: [backdropImageView, titleLabel, overviewLabel])
+        let similarMoviesView = SimilarMoviesView()
+        
+        private lazy var contentStackView = UIStackView(arrangedSubviews: [backdropImageView, titleLabel, overviewLabel, similarMoviesView])
         
         override init(frame: CGRect) {
             super.init(frame: frame)
@@ -73,6 +97,7 @@ final class MovieDetailsDisplayViewController: UIViewController {
         private func setupConstraints() {
             scrollView.translatesAutoresizingMaskIntoConstraints = false
             backdropImageView.translatesAutoresizingMaskIntoConstraints = false
+            similarMoviesView.translatesAutoresizingMaskIntoConstraints = false
             contentStackView.translatesAutoresizingMaskIntoConstraints = false
             
             NSLayoutConstraint.activate(
@@ -102,7 +127,10 @@ final class MovieDetailsDisplayViewController: UIViewController {
             
             overviewLabel.text = movieDetails.overview
         }
+        
+        func configureSimilarMovies(with movies: [Movie]) {
+            similarMoviesView.similarMovies = movies
+        }
     }
     
 }
-

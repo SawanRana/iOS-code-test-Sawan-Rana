@@ -13,4 +13,11 @@ final class APITests: XCTestCase {
         let url = URL("https://deliveroo.co.uk", "testKey", request)
         XCTAssertEqual(url.absoluteString, "https://deliveroo.co.uk/testing?api_key=testKey")
     }
+    
+    func test_similar_movies_url() {
+        let movieId: Int = 1
+        let request: Request<Movie> = Request(method: .get, path: "/movie/\(movieId)/similar")
+        let url = URL("https://deliveroo.co.uk", "testKey", request)
+        XCTAssertEqual(url.absoluteString, "https://deliveroo.co.uk/movie/1/similar?api_key=testKey")
+    }
 }
